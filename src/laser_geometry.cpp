@@ -665,6 +665,11 @@ const boost::numeric::ublas::matrix<double>& LaserProjection::getUnitVectors_(do
     tf.lookupTransform (target_frame, scan_in.header.frame_id, start_time, start_transform);
     tf.lookupTransform (target_frame, scan_in.header.frame_id, end_time, end_transform);
 
+    //ROS_ERROR("/n/n/n/n/ HELLO transformLaserScanToPointCloud_ /n/n/n/n/n");
+
+    //tf.lookupTransform (target_frame, start_time, scan_in.header.frame_id, start_time, "geo", start_transform);
+    //tf.lookupTransform (target_frame, start_time, scan_in.header.frame_id, end_time, "geo", end_transform);
+
     tf::Quaternion q;
     start_transform.getBasis().getRotation(q);
     tf2::Quaternion quat_start(q.getX(), q.getY(), q.getZ(), q.getW());
@@ -718,6 +723,42 @@ const boost::numeric::ublas::matrix<double>& LaserProjection::getUnitVectors_(do
                                     quat_end, origin_end,
                                     range_cutoff,
                                     channel_options);
+
+
+  /*
+	geometry_msgs::TransformStamped start_transform = tf.lookupTransform (target_frame, scan_in.header.frame_id, start_time);
+	geometry_msgs::TransformStamped geo_to_target_start = tf.lookupTransform (target_frame, "geo", start_time);
+	geometry_msgs::TransformStamped source_to_geo_end = tf.lookupTransform ("geo", scan_in.header.frame_id, end_time);
+
+	tf::Transform start_tf;
+	tf::transformMsgToTF(start_transform.transform, start_tf);
+	tf::Transform geo_to_target_start_tf;
+	tf::Transform source_to_geo_end_tf;
+	tf::transformMsgToTF(geo_to_target_start.transform, geo_to_target_start_tf);
+	tf::transformMsgToTF(source_to_geo_end.transform, source_to_geo_end_tf);
+	tf::Transform end_tf = geo_to_target_start_tf*source_to_geo_end_tf;
+
+	tf2::Quaternion quat_start(start_tf.getRotation().x(),
+							   start_tf.getRotation().y(),
+							   start_tf.getRotation().z(),
+							   start_tf.getRotation().w());
+	tf2::Quaternion quat_end(end_tf.getRotation().x(),
+							 end_tf.getRotation().y(),
+							 end_tf.getRotation().z(),
+							 end_tf.getRotation().w());
+
+	tf2::Vector3 origin_start(start_tf.getOrigin().x(),
+							  start_tf.getOrigin().y(),
+							  start_tf.getOrigin().z());
+	tf2::Vector3 origin_end(end_tf.getOrigin().x(),
+							end_tf.getOrigin().y(),
+							end_tf.getOrigin().z());
+	transformLaserScanToPointCloud_(target_frame, scan_in, cloud_out,
+									quat_start, origin_start,
+									quat_end, origin_end,
+									range_cutoff,
+									channel_options);
+  */
   }
 
 } //laser_geometry
